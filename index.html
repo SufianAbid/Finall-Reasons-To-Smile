@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reasons to Smile 💖</title>
+  <meta name="description" content="A little space on the internet just to make you smile 🌈💖">
+  <meta property="og:image" content="https://example.com/yourimage.png">
+  <meta name="theme-color" content="#ffb6c1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #ffe6f0;
+      overflow: hidden;
+    }
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .main-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      padding: 20px;
+      text-align: center;
+    }
+    .start-link, .btn {
+      font-size: 24px;
+      background-color: #ffb6c1;
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+      transition: background 0.3s ease;
+    }
+    .start-link:hover, .btn:hover {
+      background-color: #ff69b4;
+    }
+    .card {
+      background: white;
+      border-radius: 15px;
+      border: 4px dashed #ff69b4;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(255,182,193,0.4);
+      animation: popIn 0.6s ease;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .quote-text {
+      font-size: 1.3rem;
+      color: #ff1493;
+      line-height: 1.6;
+    }
+    @keyframes floatAway {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-100px); }
+    }
+    .sparkle {
+      position: fixed;
+      font-size: 18px;
+      pointer-events: none;
+      animation: floatAway 1s ease forwards;
+      z-index: 999;
+    }
+    .reason-heading {
+      font-size: 3rem;
+      color: #ff1493;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: pulse 1.5s infinite ease-in-out, beep 0.6s infinite;
+      display: inline-block;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2); /* Text grows slightly */
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes beep {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7; /* Fade effect for the beeping */
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <audio id="bgMusic" loop>
+    <source src="main-music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="main-content" id="mainContent">
+    <a href="#" id="startLink" class="start-link">Click Me 💗</a>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initClouds(); // Reinit clouds on resize
+    });
+
+    // CLOUD PARTICLES
+    let clouds = [];
+
+    function initClouds() {
+      clouds = [];
+      for (let i = 0; i < 25; i++) {
+        clouds.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.6,
+          radius: Math.random() * 20 + 30,
+          speed: Math.random() * 0.5 + 0.2,
+          opacity: Math.random() * 0.3 + 0.2
+        });
+      }
+    }
+
+    function drawCloud(x, y, r, opacity) {
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.arc(x + r * 0.7, y - r * 0.3, r * 0.8, 0, Math.PI * 2);
+      ctx.arc(x + r * 1.4, y, r * 0.9, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function animateClouds() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let cloud of clouds) {
+        drawCloud(cloud.x, cloud.y, cloud.radius, cloud.opacity);
+        cloud.x += cloud.speed;
+        if (cloud.x - cloud.radius * 2 > canvas.width) {
+          cloud.x = -cloud.radius * 3;
+          cloud.y = Math.random() * canvas.height * 0.6;
+        }
+      }
+      requestAnimationFrame(animateClouds);
+    }
+
+    initClouds();
+    animateClouds();
+
+    // APP FUNCTIONALITY
+    const main = document.getElementById("mainContent");
+    document.getElementById("startLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      document.getElementById("bgMusic").play();
+      main.innerHTML = '<h1 class="card">Hey 💖</h1><button class="btn" id="btnHey">Hey</button>';
+      document.getElementById("btnHey").addEventListener("click", () => {
+        main.innerHTML = '<h2 class="card">Still feeling low?</h2><button class="btn" id="btnYes">Yes</button>';
+        document.getElementById("btnYes").addEventListener("click", showQuotes);
+      });
+    });
+
+    const quotes = [
+      "You are the source of happiness for me at the office — your presence always brings a smile to my face. I pray to Allah that you always keep smiling, no matter what. 🌸",
+      "If someone has ditched you in life, it doesn’t mean it’s the end — it’s their loss, not yours. They did something wrong, and life will hold them accountable. Stop dwelling on the past. You are strong, worthy, and destined for so much more ahead. Keep your head high and your heart open. Allah has better plans for you. 💫",
+      "You know, sometimes when the day feels heavy or nothing seems right, all it takes is one look at your smile — and suddenly everything’s okay. You have no idea how perfect your smile is. It's not just beautiful, it's healing",
+      "You're cute in a way that makes people pause and smile without knowing why. And yeah, you're short — but that just makes you even more special, like a pocket-sized dose of joy Allah sent to make lives better.",
+      "I don’t know how you do it… but every time I see you, you’re just effortlessly killing it. Even when you say you’re not in the mood or just threw something on — you still manage to look like the main character.",
+      "Mehroz, you were born to slay. Don’t let some shitty person mess with your peace or your mental health — they’re not worth it. Put it all aside. The pain, the overthinking, the what-ifs — just drop it. You deserve a life where you’re free, where you're laughing loud, glowing bright, and living for you.",
+      "You shine brighter than you know ✨",
+      "Mehroz, you always say my jokes are lame — and I know they are. But you know what? I make those lame jokes on purpose. You know why? Because even if you don’t laugh at the joke, you end up smiling at me. And that’s the goal. That smile of yours? That’s all I want to see. So yeah, mission always accomplished — because your smile is worth every lame punchline.",
+      "Mehroz, we've walked along Bank Road, braved the rain together, shared dinners, watched countless movies, and stuffed our faces with 'cookiyan'. We’ve fought over chairs and made fun of chai — but those are the memories that matter, the ones you should hold close. Forget all the crappy memories, Chalo create nai ones. And always remember, if there’s ever a moment when you feel like no one’s around, Sufian is always here. You don’t even need to call me — I’ll be there. You are not alone, not now, not ever.",
+      "Mehroz, let’s go grab a coffee tomorrow at Coffee Beans and Tea Leaves. Let’s get that hazelnut drink you love, just vibe out, and talk. I really hope it helps you feel better, just a change of pace to clear your mind.",
+      "I hope I did something to make your day special 💝"
+    ];
+
+    function typeText(element, text, index = 0, callback) {
+      if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        setTimeout(() => typeText(element, text, index + 1, callback), 50);
+      } else {
+        callback(); // Once typing is done, trigger the callback
+      }
+    }
+
+    function showQuotes() {
+      let index = 0;
+      const showNext = () => {
+        if (index >= quotes.length) {
+          main.innerHTML = '<div class="card"><p class="quote-text">I hope I made you smile today 💗</p><button class="btn" onclick="confettiSurprise()">🎉 Click Me for Surprise</button></div>';
+          return;
+        }
+        main.innerHTML = '<div class="reason-heading">Reasons to Smile</div><div class="card"><p class="quote-text" id="quote"></p></div>';
+        const quoteElement = document.getElementById("quote");
+        typeText(quoteElement, quotes[index], 0, () => {
+          index++;
+          setTimeout(showNext, 3000); // Wait 3 seconds after each quote before showing the next
+        });
+      };
+      showNext();
+    }
+
+    function confettiSurprise() {
+      alert("Surprise! 🎉");
+    }
+  </script>
+</body>
+</html>
